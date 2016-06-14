@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta property="qc:admins" content="1444076016125246375" />
+<meta property="wb:webmaster" content="e494ec2e61e8cdef" />
+<script type="text/javascript" src="./js/jquery-1.2.6.min.js"></script>
+<!-- QQ第三方登录JS导入 -->
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc.js#appId=100253466" charset="utf-8"></script>
+<!-- Sina第三方登录JS导入 -->
+<script  type="text/javascript" src=" http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=3347040998"  charset="utf-8"></script>
+<title>管理系统</title>
+<style>
+body{background:#666; padding:0; font-size:12px;}
+a{font-weight:bold; background:#fff;}
+.body{width:750px; margin:0 auto 300px auto; background:#f9f9f9;}
+.title{font:normal normal 18px/2.2em "黑体"; margin:0; text-align:center; background:#ccc; border:1px solid #bbb; border-bottom:5px solid #bbb;}
+.contents{padding:0 15px; line-height:1.7em; border:1px solid #bbb;}
+ .contents .line{height:1px; background:#ccc; overflow:hidden; margin:15px 0;}
+.footer{background:#ccc; border:1px solid #bbb; border-top:5px solid #bbb; text-align:center; line-height:3em;}
+</style>
+</head>
+<body>
+<div class="body">登录测试：
+ <span id="qq_login_btn"></span>
+ <script type="text/javascript">
+  QC.Login({
+   btnId:"qq_login_btn" //插入按钮的节点id
+  });
+ </script>
+ <script type="text/javascript">
+ if(QC.Login.check()){//如果已登录
+  QC.Login.getMe(function(openId, accessToken){
+   alert(["当前登录用户的", "openId为："+openId, "accessToken为："+accessToken].join("n"));
+  });
+  //这里可以调用自己的保存接口
+  //...
+ }
+ </script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc.js#appId=100229030" charset="UTF-8"></script>
+<script type="text/javascript">
+ function getInfo() {
+  if(QC.Login.check()){
+   QC.api("get_user_info")
+    .success(function(s){//成功回调
+     alert("获取用户信息成功！当前用户昵称为："+s.data.nickname);
+    })
+    .error(function(f){//失败回调
+     alert("获取用户信息失败！");
+    })
+    .complete(function(c){//完成请求回调
+     alert(c.stringifyData());
+     //通过QQ OpenAPI提供的各种方法提取数据
+    });
+  }else{
+   alert("请登录后体验");
+  }
+ }
+ function getToken() {
+  if(QC.Login.check()){
+   QC.Login.getMe(function(openId, accessToken){
+    alert(["当前登录用户的", "openid为："+openId, "accessToken为："+accessToken].join("n")); 
+   });
+   alert(s.data.nickname);
+  }else{
+   alert("请登录后体验");
+  }
+ }
+ //callback为jssdk保留字，测试是否会覆盖当前页面函数
+ function callback(){
+  alert("已经成功回调！");
+ }
+
+ function pageInit() {
+  document.getElementByIdx_x("qq_login_btn").innerHTML = document.getElementByIdx_x("qq_login_btn").getAttribute("_origText");
+ }
+ //获取jsdoc示例
+ function getDoc() {
+  QC.api.getDoc("get_user_info", function(doc){
+   var str = QC.JSON.stringify(doc);
+   alert(str);
+  });
+ }
+ pageInit();
+ //加入QQ登录按钮
+ QC.Login({
+  btnId:"qq_login_btn"
+ });
+ 
+</script>
+<div class="pad_2">
+  <label><input type="button" value=" 获取 用户昵称" onclick="getInfo();"/></label>
+ </div>
+<!--start sina账号登录平台--> 
+<span id="wb_connect_btn"></span>
+<script type="text/javascript">
+ WB2.anyWhere(function(W){
+ W.widget.connectButton({
+  id: "wb_connect_btn",
+  callback : {
+   login:function(o){
+    //登录成功之后执行
+    alert(o.screen_name);
+   },
+   logout:function(){
+    //退出之后执行
+    alert('退出之后执行');
+   }
+  }
+ });
+});
+</script>
+<!-- end sina账号登陆平台 -->
+ </body>
+</html>
